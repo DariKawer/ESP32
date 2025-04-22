@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Eventos Registrados</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Eventos Registrados</h1>
+    
+    <div class="stats">
+      <p>Total de eventos: <span id="total-events">0</span></p>
+      <p>Último evento: <span id="last-event-time">-</span></p>
+      <p>Valor actual del contador: <span id="current-counter">-</span></p>
+    </div>
+    
+    <div class="actions">
+      <button id="refresh-btn">Actualizar</button>
+      <a href="index.html" class="back-link">Volver al Enviador</a>
+    </div>
+    
+    <table class="event-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Botón</th>
+          <th>Acción</th>
+          <th>Contador</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody id="events-body">
+        <tr>
+          <td colspan="5">Cargando eventos...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', loadEvents);
+    document.getElementById('refresh-btn').addEventListener('click', loadEvents);
+
+    async function loadEvents() {
+      try {
+        const response = await fetch('/api/eventos');
+        const data = await response.json();
+        
+        // Actualizar stats
+        document.getElementById('total-events').textContent = data.total;
+        if(data.eventos.length > 0) {
+          const lastEvent = data.eventos[0]; // El más reciente
+          document.getElementById('last-event-time').textContent = 
+            new Date(lastEvent.timestamp).toLocaleString();
+          
+          // Mostrar el valor actual del contador (del último evento)
+          document.getElementById('current-counter').textContent = 
+            lastEvent.contador || '-';
+        }
+        
+        // Actualizar tabla
+        const tbody = document.getElementById('events-body');
+        tbody.innerHTML = '';
+        
+        data.eventos.forEach((event, index) => {
+          const row = document.createElement('tr');
+          
+          row.innerHTML = `
+            <td>${data.total - index}</td>
+            <td>${event.boton || '-'}</td>
+            <td>${event.accion || '-'}</td>
+            <td>${event.contador || '0'}</td>
+            <td>${new Date(event.timestamp).toLocaleString()}</td>
+          `;
+          
+          tbody.appendChild(row);
+        });
+        
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('events-body').innerHTML = `
+          <tr><td colspan="5">Error al cargar eventos</td></tr>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
