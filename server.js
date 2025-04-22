@@ -38,29 +38,30 @@ function guardarEventos() {
 // Rutas
 app.post('/api/evento', (req, res) => {
   const { boton } = req.body;
-  
+
   if (!boton) {
     return res.status(400).json({ error: 'Falta el ID del botón' });
   }
-  
+
   const nuevoEvento = {
     ...req.body,
     timestamp: new Date().toISOString()
   };
-  
+
   eventos.push(nuevoEvento);
   guardarEventos();
-  
-  res.json({ 
-    mensaje: 'Evento guardado', 
-    evento: nuevoEvento 
+
+  res.json({
+    mensaje: 'Evento guardado',
+    evento: nuevoEvento
   });
 });
 
 app.get('/api/eventos', (req, res) => {
+  
   const limit = Number(req.query.limit) || 10;
   const eventosRecientes = eventos.slice(-limit).reverse();
-  
+
   res.json({
     total: eventos.length,
     eventos: eventosRecientes
@@ -68,11 +69,20 @@ app.get('/api/eventos', (req, res) => {
 });
 
 app.get('/api/status', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'ok',
     eventos: eventos.length,
     ultimoEvento: eventos.length > 0 ? eventos[eventos.length - 1].timestamp : 'Ninguno'
   });
+});
+
+app.get('/api/max-contador', (req, res) => {
+  if (eventos.length === 0) {
+    return res.json({ maxContador: 0 });
+  }
+  
+  const maxContador = Math.max(...eventos.map(evento => evento.contador || 0));
+  res.json({ maxContador });
 });
 
 // Iniciar servidor
