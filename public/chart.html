@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gráfica de Eventos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gráfica de Eventos</h1>
+        
+        <div class="filters">
+            <select id="chart-type">
+                <option value="line">Línea</option>
+                <option value="bar">Barras</option>
+            </select>
+            <select id="time-range">
+                <option value="all">Todos</option>
+                <option value="today" selected>Hoy</option>
+                <option value="week">Última semana</option>
+                <option value="month">Último mes</option>
+            </select>
+            <button id="refresh-chart">Actualizar</button>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="events-chart"></canvas>
+        </div>
+        
+        <div class="actions">
+            <a href="events.html" class="button">Ver Tabla</a>
+            <a href="index.html" class="button">Volver</a>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+        
+        document.addEventListener('DOMContentLoaded', loadChartData);
+        document.getElementById('refresh-chart').addEventListener('click', loadChartData);
+        document.getElementById('chart-type').addEventListener('change', loadChartData);
+        document.getElementById('time-range').addEventListener('change', loadChartData);
+        
+        async function loadChartData() {
+            try {
+                const response = await fetch('/api/eventos?limit=1000');
+                const data = await response.json();
+                
+                if (data.eventos.length === 0) {
+                    document.getElementById('events-chart').innerHTML = 'No hay eventos para mostrar';
+                    return;
+                }
+                
+                const chartType = document.getElementById('chart-type').value;
+                const timeRange = document.getElementById('time-range').value;
+                
+                // Filtrar eventos por rango de tiempo
+                let filteredEvents = [...data.eventos].reverse(); // Orden cronológico
+                
+                if (timeRange !== 'all') {
+                    const now = new Date();
+                    let cutoffDate;
+                    
+                    if (timeRange === 'today') {
+                        cutoffDate = new Date(now.setHours(0, 0, 0, 0));
+                    } else if (timeRange === 'week') {
+                        cutoffDate = new Date(now.setDate(now.getDate() - 7));
+                    } else if (timeRange === 'month') {
+                        cutoffDate = new Date(now.setMonth(now.getMonth() - 1));
+                    }
+                    
+                    filteredEvents = filteredEvents.filter(event => 
+                        new Date(event.timestamp) >= cutoffDate);
+                }
+                
+                // Preparar datos para la gráfica
+                const timestamps = filteredEvents.map(event => 
+                    new Date(event.timestamp).toLocaleString('es-ES', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        day: '2-digit',
+                        month: '2-digit'
+                    }));
+                const counters = filteredEvents.map(event => event.contador || 0);
+                
+                // Crear o actualizar la gráfica
+                const ctx = document.getElementById('events-chart').getContext('2d');
+                
+                if (chart) {
+                    chart.destroy();
+                }
+                
+                chart = new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: timestamps,
+                        datasets: [{
+                            label: 'Contador',
+                            data: counters,
+                            backgroundColor: 'rgba(184, 184, 184, 0.2)',
+                            borderColor: '#555',
+                            borderWidth: 1,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Contador',
+                                    color: '#555'
+                                },
+                                grid: {
+                                    color: '#f0f0f0'
+                                },
+                                ticks: {
+                                    color: '#555'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Tiempo',
+                                    color: '#555'
+                                },
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45,
+                                    color: '#555'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#555',
+                                    font: {
+                                        family: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif'
+                                    }
+                                }
+                            },
+                            title: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                titleColor: '#333',
+                                bodyColor: '#555',
+                                borderColor: '#ddd',
+                                borderWidth: 1,
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        return tooltipItems[0].label;
+                                    },
+                                    label: function(context) {
+                                        const event = filteredEvents[context.dataIndex];
+                                        return [
+                                            `Contador: ${event.contador || 0}`,
+                                            `Botón: ${event.boton || '-'}`,
+                                            `Acción: ${event.accion || '-'}`
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error al cargar datos para la gráfica:', error);
+                document.getElementById('events-chart').innerHTML = 'Error al cargar datos';
+            }
+        }
+    </script>
+</body>
+</html>

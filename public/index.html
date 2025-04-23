@@ -20,7 +20,10 @@
             <p>Último envío: <span id="last-sent">Ninguno aún</span></p>
         </div>
 
-        <a href="events.html" class="view-events-link">Ver Eventos Registrados</a>
+        <div class="links">
+            <a href="events.html" class="view-events-link">Ver Eventos Registrados</a>
+            <a href="chart.html" class="view-chart-link">Ver Gráfica de Eventos</a>
+        </div>
     </div>
 
     <script>
@@ -28,6 +31,8 @@
   let counter = 0;
   const btn = document.getElementById('send-event-btn');
   const counterDisplay = document.getElementById('counter');
+  const statusDisplay = document.getElementById('status');
+  const lastSentDisplay = document.getElementById('last-sent');
   
   // Obtener el máximo contador del servidor al cargar
   try {
@@ -51,6 +56,9 @@
     counterDisplay.textContent = counter;
     localStorage.setItem('eventCounter', counter.toString());
     
+    // Actualizar la interfaz
+    statusDisplay.textContent = 'Enviando...';
+    
     try {
       const response = await fetch('/api/evento', {
         method: 'POST',
@@ -66,8 +74,15 @@
       const data = await response.json();
       console.log('Evento enviado. Contador:', counter);
       
+      // Actualizar interfaz tras éxito
+      statusDisplay.textContent = 'Enviado con éxito';
+      lastSentDisplay.textContent = new Date().toLocaleString();
+      
     } catch (error) {
       console.error('Error al enviar evento:', error);
+      // Actualizar interfaz tras error
+      statusDisplay.textContent = 'Error al enviar';
+      
       // Si falla el envío, revertir el contador
       counter--;
       counterDisplay.textContent = counter;
