@@ -2,95 +2,106 @@
 <html>
 
 <head>
-    <title>Enviar Eventos</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Enviar Eventos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Enviar Eventos</h1>
+  <div class="container">
+    <h1>Enviar Eventos</h1>
 
-        <div class="control-panel">
-            <button id="send-event-btn">Enviar Evento</button>
-            <p>Contador: <span id="counter">0</span></p>
-        </div>
-
-        <div class="status">
-            <p>Estado: <span id="status">Listo</span></p>
-            <p>Último envío: <span id="last-sent">Ninguno aún</span></p>
-        </div>
-
-        <div class="links">
-            <a href="events.html" class="view-events-link">Ver Eventos Registrados</a>
-            <a href="chart.html" class="view-chart-link">Ver Gráfica de Eventos</a>
-        </div>
+    <div class="control-panel">
+      <button id="send-event-btn">Enviar Evento</button>
+      <p>Contador: <span id="counter">0</span></p>
     </div>
 
-    <script>
-       document.addEventListener('DOMContentLoaded', async function() {
-  let counter = 0;
-  const btn = document.getElementById('send-event-btn');
-  const counterDisplay = document.getElementById('counter');
-  const statusDisplay = document.getElementById('status');
-  const lastSentDisplay = document.getElementById('last-sent');
-  
-  // Obtener el máximo contador del servidor al cargar
-  try {
-    const response = await fetch('/api/max-contador');
-    const data = await response.json();
-    counter = data.maxContador;
-    counterDisplay.textContent = counter;
-    console.log('Contador inicializado desde servidor:', counter);
-  } catch (error) {
-    console.error('Error al obtener contador:', error);
-    // Si falla, intentar con localStorage
-    const savedCounter = localStorage.getItem('eventCounter');
-    if (savedCounter) {
-      counter = parseInt(savedCounter);
-      counterDisplay.textContent = counter;
-    }
-  }
+    <div class="status">
+      <p>Estado: <span id="status">Listo</span></p>
+      <p>Último envío: <span id="last-sent">Ninguno aún</span></p>
+    </div>
 
-  btn.addEventListener('click', async () => {
-    counter++;
-    counterDisplay.textContent = counter;
-    localStorage.setItem('eventCounter', counter.toString());
-    
-    // Actualizar la interfaz
-    statusDisplay.textContent = 'Enviando...';
-    
-    try {
-      const response = await fetch('/api/evento', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          boton: "boton_web",
-          accion: "click",
-          contador: counter,  // Envía el contador actual
-          origen: "interfaz_web"
-        })
+    <div class="links">
+      <a href="http://localhost:3001/events.html" class="view-events-link">Ver Eventos Registrados</a>
+      <a href="http://localhost:3001/chart.html" class="view-chart-link">Ver Gráfica de Eventos</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      let counter = 0;
+      const btn = document.getElementById('send-event-btn');
+      const counterDisplay = document.getElementById('counter');
+      const statusDisplay = document.getElementById('status');
+      const lastSentDisplay = document.getElementById('last-sent');
+
+      // Obtener el máximo contador del servidor al cargar
+      try {
+        //const response = await fetch('/api/max-contador');
+        const response = await fetch('http://localhost:3000/api/max-contador');
+        const data = await response.json();
+        counter = data.maxContador;
+        counterDisplay.textContent = counter;
+        console.log('Contador inicializado desde servidor:', counter);
+      } catch (error) {
+        console.error('Error al obtener contador:', error);
+        // Si falla, intentar con localStorage
+        const savedCounter = localStorage.getItem('eventCounter');
+        if (savedCounter) {
+          counter = parseInt(savedCounter);
+          counterDisplay.textContent = counter;
+        }
+      }
+
+      btn.addEventListener('click', async () => {
+        counter++;
+        counterDisplay.textContent = counter;
+        localStorage.setItem('eventCounter', counter.toString());
+
+        // Actualizar la interfaz
+        statusDisplay.textContent = 'Enviando...';
+
+        try {
+          const response = await fetch('http://localhost:3000/api/evento', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              boton: "boton_web",
+              accion: "click",
+              contador: counter,
+              origen: "interfaz_web"
+            })
+          });
+          /*const response = await fetch('/api/evento', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              boton: "boton_web",
+              accion: "click",
+              contador: counter,  // Envía el contador actual
+              origen: "interfaz_web"
+            })
+          });*/
+
+          const data = await response.json();
+          console.log('Evento enviado. Contador:', counter);
+
+          // Actualizar interfaz tras éxito
+          statusDisplay.textContent = 'Enviado con éxito';
+          lastSentDisplay.textContent = new Date().toLocaleString();
+
+        } catch (error) {
+          console.error('Error al enviar evento:', error);
+          // Actualizar interfaz tras error
+          statusDisplay.textContent = 'Error al enviar';
+
+          // Si falla el envío, revertir el contador
+          counter--;
+          counterDisplay.textContent = counter;
+          localStorage.setItem('eventCounter', counter.toString());
+        }
       });
-      
-      const data = await response.json();
-      console.log('Evento enviado. Contador:', counter);
-      
-      // Actualizar interfaz tras éxito
-      statusDisplay.textContent = 'Enviado con éxito';
-      lastSentDisplay.textContent = new Date().toLocaleString();
-      
-    } catch (error) {
-      console.error('Error al enviar evento:', error);
-      // Actualizar interfaz tras error
-      statusDisplay.textContent = 'Error al enviar';
-      
-      // Si falla el envío, revertir el contador
-      counter--;
-      counterDisplay.textContent = counter;
-      localStorage.setItem('eventCounter', counter.toString());
-    }
-  });
-});
-    </script>
+    });
+  </script>
 </body>
 
 </html>

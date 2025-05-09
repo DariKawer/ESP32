@@ -507,5 +507,264 @@
     "timestamp": "2025-04-23T17:08:11.188Z",
     "id": "6c906ed2-8480-4dcd-9ee9-522b576796c3",
     "timestamp_recepcion": "2025-04-23T17:08:11.192Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 72,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:31:21.486Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 73,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:31:22.575Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 74,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:31:23.424Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 75,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:31:24.219Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 76,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:10.737Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 77,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:20.200Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 78,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.017Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 79,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.235Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 80,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.419Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 81,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.597Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 82,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.773Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 83,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:43.951Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 84,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:44.131Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 85,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:44.293Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 86,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:44.486Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 87,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:44.694Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 88,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:44.872Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 89,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:45.242Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 90,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:45.435Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 91,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:45.626Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 92,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:45.828Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 93,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:46.035Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 94,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:46.242Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 95,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:46.448Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 96,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:46.647Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 97,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:46.852Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 98,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:47.054Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 99,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:47.257Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 100,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:37:47.458Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 101,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:41.427Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 102,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:42.459Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 103,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:43.204Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 104,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:46.022Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 105,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:46.589Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 106,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:46.945Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 107,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:57.540Z"
+  },
+  {
+    "boton": "boton_web",
+    "accion": "click",
+    "contador": 108,
+    "origen": "interfaz_web",
+    "timestamp": "2025-05-09T04:54:57.770Z"
   }
 ]

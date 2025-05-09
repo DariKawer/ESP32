@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Gráfica de Eventos</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -17,10 +18,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Gráfica de Eventos</h1>
-        
+
         <div class="filters">
             <select id="chart-type">
                 <option value="line">Línea</option>
@@ -34,45 +36,46 @@
             </select>
             <button id="refresh-chart">Actualizar</button>
         </div>
-        
+
         <div class="chart-container">
             <canvas id="events-chart"></canvas>
         </div>
-        
+
         <div class="actions">
-            <a href="events.html" class="button">Ver Tabla</a>
-            <a href="index.html" class="button">Volver</a>
+            <a href="http://localhost:3001/events.html" class="button">Ver Tabla</a>
+            <a href="http://localhost:3000/index.html" class="button">Volver</a>
         </div>
     </div>
 
     <script>
         let chart;
-        
+
         document.addEventListener('DOMContentLoaded', loadChartData);
         document.getElementById('refresh-chart').addEventListener('click', loadChartData);
         document.getElementById('chart-type').addEventListener('change', loadChartData);
         document.getElementById('time-range').addEventListener('change', loadChartData);
-        
+
         async function loadChartData() {
             try {
-                const response = await fetch('/api/eventos?limit=1000');
+                //const response = await fetch('/api/eventos?limit=1000');
+                const response = await fetch('http://localhost:3001/api/eventos?limit=1000');
                 const data = await response.json();
-                
+
                 if (data.eventos.length === 0) {
                     document.getElementById('events-chart').innerHTML = 'No hay eventos para mostrar';
                     return;
                 }
-                
+
                 const chartType = document.getElementById('chart-type').value;
                 const timeRange = document.getElementById('time-range').value;
-                
+
                 // Filtrar eventos por rango de tiempo
                 let filteredEvents = [...data.eventos].reverse(); // Orden cronológico
-                
+
                 if (timeRange !== 'all') {
                     const now = new Date();
                     let cutoffDate;
-                    
+
                     if (timeRange === 'today') {
                         cutoffDate = new Date(now.setHours(0, 0, 0, 0));
                     } else if (timeRange === 'week') {
@@ -80,13 +83,13 @@
                     } else if (timeRange === 'month') {
                         cutoffDate = new Date(now.setMonth(now.getMonth() - 1));
                     }
-                    
-                    filteredEvents = filteredEvents.filter(event => 
+
+                    filteredEvents = filteredEvents.filter(event =>
                         new Date(event.timestamp) >= cutoffDate);
                 }
-                
+
                 // Preparar datos para la gráfica
-                const timestamps = filteredEvents.map(event => 
+                const timestamps = filteredEvents.map(event =>
                     new Date(event.timestamp).toLocaleString('es-ES', {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -94,14 +97,14 @@
                         month: '2-digit'
                     }));
                 const counters = filteredEvents.map(event => event.contador || 0);
-                
+
                 // Crear o actualizar la gráfica
                 const ctx = document.getElementById('events-chart').getContext('2d');
-                
+
                 if (chart) {
                     chart.destroy();
                 }
-                
+
                 chart = new Chart(ctx, {
                     type: chartType,
                     data: {
@@ -170,10 +173,10 @@
                                 borderColor: '#ddd',
                                 borderWidth: 1,
                                 callbacks: {
-                                    title: function(tooltipItems) {
+                                    title: function (tooltipItems) {
                                         return tooltipItems[0].label;
                                     },
-                                    label: function(context) {
+                                    label: function (context) {
                                         const event = filteredEvents[context.dataIndex];
                                         return [
                                             `Contador: ${event.contador || 0}`,
@@ -186,7 +189,7 @@
                         }
                     }
                 });
-                
+
             } catch (error) {
                 console.error('Error al cargar datos para la gráfica:', error);
                 document.getElementById('events-chart').innerHTML = 'Error al cargar datos';
@@ -194,4 +197,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -1,12 +1,13 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Configuración básica
+app.use(cors());
 app.use(express.json());
-app.use(express.static('public')); // Para servir archivos estáticos
 
 // Datos de eventos
 let eventos = [];
@@ -25,40 +26,27 @@ function cargarEventos() {
   }
 }
 
-// Guardar eventos
-function guardarEventos() {
-  try {
-    const filePath = path.join(__dirname, 'eventos.json');
-    fs.writeFileSync(filePath, JSON.stringify(eventos, null, 2));
-  } catch (error) {
-    console.log('Error al guardar eventos:', error.message);
-  }
-}
-
-// Rutas
-app.post('/api/evento', (req, res) => {
-  const { boton } = req.body;
-
-  if (!boton) {
-    return res.status(400).json({ error: 'Falta el ID del botón' });
-  }
-
-  const nuevoEvento = {
-    ...req.body,
-    timestamp: new Date().toISOString()
-  };
-
-  eventos.push(nuevoEvento);
-  guardarEventos();
-
-  res.json({
-    mensaje: 'Evento guardado',
-    evento: nuevoEvento
-  });
+// Servir archivos estáticos permitidos
+app.get('/chart.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'chart.html'));
 });
 
+app.get('/events.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'events.html'));
+});
+
+app.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'style.css'));
+});
+
+// Bloquear acceso a index.html
+app.get('/index.html', (req, res) => {
+  res.status(403).send('Acceso denegado: Este servidor solo permite acceso a chart.html y events.html');
+});
+
+// Rutas GET
 app.get('/api/eventos', (req, res) => {
-  
+  cargarEventos(); // Reload eventos.json
   const limit = Number(req.query.limit) || 10;
   const eventosRecientes = eventos.slice(-limit).reverse();
 
@@ -69,6 +57,7 @@ app.get('/api/eventos', (req, res) => {
 });
 
 app.get('/api/status', (req, res) => {
+  cargarEventos(); // Reload eventos.json
   res.json({
     status: 'ok',
     eventos: eventos.length,
@@ -77,6 +66,7 @@ app.get('/api/status', (req, res) => {
 });
 
 app.get('/api/max-contador', (req, res) => {
+  cargarEventos(); // Reload eventos.json
   if (eventos.length === 0) {
     return res.json({ maxContador: 0 });
   }
@@ -85,8 +75,18 @@ app.get('/api/max-contador', (req, res) => {
   res.json({ maxContador });
 });
 
+// Redirigir raíz a events.html
+app.get('/', (req, res) => {
+  res.redirect('/events.html');
+});
+
+// Manejar rutas no permitidas
+app.use((req, res) => {
+  res.status(404).send('Recurso no encontrado');
+});
+
 // Iniciar servidor
 cargarEventos();
 app.listen(PORT, () => {
-  console.log(`Servidor listo en http://localhost:${PORT}`);
+  console.log(`Servidor GET listo en http://localhost:${PORT}`);
 });

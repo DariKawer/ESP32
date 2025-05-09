@@ -18,8 +18,8 @@
 
         <div class="actions">
             <button id="refresh-btn">Actualizar</button>
-            <a href="chart.html" class="view-chart-btn">Ver Gráfica</a>
-            <a href="index.html" class="back-link">Volver al Enviador</a>
+            <a href="http://localhost:3001/chart.html" class="view-chart-btn">Ver Gráfica</a>
+            <a href="http://localhost:3000/index.html" class="back-link">Volver al Enviador</a>
         </div>
 
         <table class="event-table">
@@ -46,7 +46,8 @@
 
         async function loadEvents() {
             try {
-                const response = await fetch('/api/eventos');
+                //const response = await fetch('/api/eventos');
+                const response = await fetch('http://localhost:3001/api/eventos');
                 const data = await response.json();
 
                 // Actualizar stats
